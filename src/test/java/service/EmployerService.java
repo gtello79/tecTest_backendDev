@@ -1,6 +1,6 @@
 package service;
-import models.DTO.EmployerDTO;
-import models.DTO.ProductDTO;
+import models.bussines.Employer;
+import models.bussines.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,16 +8,19 @@ import java.util.ArrayList;
 @Service
 public class EmployerService {
 
-    ArrayList<EmployerDTO> employers;
+    ArrayList<Employer> employers;
 
 
-    ArrayList<ProductDTO> stock;
+    ArrayList<Product> stock;
 
 
-    public boolean notifyItem(EmployerDTO encharged, ProductDTO toChange, Integer optionSelected){
+    // AddItem
 
+    // Modificar Item
 
-    }
+    // Eliminar Producto
 
+    // Marcar un producto
 
+    // Resumen de monto vendido
 }

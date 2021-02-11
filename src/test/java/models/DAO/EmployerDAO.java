@@ -1,4 +1,4 @@
 package models.DAO;
 
-public interface EmployerDAO {
+public class EmployerDAO {
 }

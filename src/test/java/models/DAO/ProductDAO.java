@@ -1,4 +1,4 @@
 package models.DAO;
 
-public interface ProductDAO {
+public class ProductDAO {
 }

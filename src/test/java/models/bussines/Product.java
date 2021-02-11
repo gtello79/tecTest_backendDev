@@ -1,18 +1,10 @@
-package models.DTO;
-
-import java.util.Date;
+package models.bussines;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.*;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 @Setter
 @Getter
@@ -21,7 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @table(name='Product')
 
-public class ProductDTO {
+public class Product {
 
     @Id
     @Column(name="IDProduct")
