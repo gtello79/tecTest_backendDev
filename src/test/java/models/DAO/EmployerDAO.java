@@ -1,4 +1,18 @@
 package models.DAO;
 
-public class EmployerDAO {
+import models.DAOImple.EmployerDAOImple;
+
+public class EmployerDAO implements EmployerDAOImple {
+
+    private int idEmployer;
+
+    private String employerName;
+
+    private int idNacionality;
+
+
+
+
+
+
 }

@@ -1,4 +1,4 @@
-package models.bussines;
+package models.entitys;
 
 import javax.persistence.Entity;
 
@@ -9,7 +9,8 @@ import lombok.*;
 @ToString
 
 @Entity
-@table(name='Product')
 
-public class Shipment {
+
+public class Nationality {
+
 }

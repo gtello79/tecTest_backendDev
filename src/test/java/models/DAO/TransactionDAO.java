@@ -1,4 +1,12 @@
 package models.DAO;
 
-public class TransactionDAO {
+import models.DAOImple.TransactionDAOImple;
+
+public class TransactionDAO implements TransactionDAOImple {
+    private int idEmployer;
+    private int idProduct;
+    private int transactionType;
+    private String transactionDate;
+    private String transactionTime;
+
 }
