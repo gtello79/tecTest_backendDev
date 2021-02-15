@@ -1,6 +1,7 @@
 # Prueba tecnica Desarrollador Backend Jr
 
 ## Enunciado
+
 La aplicación será de “Registro de ventas", que consiste en tener un listado de productos para ser vendidos, la
 aplicación deberá tener como mínimo:
 
@@ -23,29 +24,30 @@ IMPORTANTE: No se requiere un mantenedor de personas(usuarios)
 Vamos evaluar la evolución del código por lo que te pedimos nos envíes desde el primer día el repositorio de git en
 donde irás dejando tu código para front y/o back
 
-
 ## Modelado de la solución
 
-Se integra la clase usuario y producto, para modelar a los usuarios capaces de utilizar la plataforma en conjunto a los productos que serán transaccionados.
-  - Clase Empleado
+Se integra la clase usuario y producto, para modelar a los usuarios capaces de utilizar la plataforma en conjunto a los
+productos que serán transaccionados.
+
+- Clase Empleado
     - ID Usuario
     - Rut
     - Nombre
-    
-  - Clase Producto 
+
+- Clase Producto
     - ID Producto
-    - Serie de producto  
+    - Serie de producto
     - Nombre
     - Precio
-    
-  - Clase Transaction
+
+- Clase Transaction
     - ID Orden
     - ID Producto
-    - ID Empleado  
+    - ID Empleado
     - Ultima modificacion
-      - (1) Ingresado
-      - (2) Modificado
-      - (3) Eliminado
-      - (4) Robado
-    
+        - (1) Ingresado
+        - (2) Modificado
+        - (3) Eliminado
+        - (4) Robado
+
 ## Supuestos

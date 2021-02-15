@@ -1,4 +1,4 @@
-package models.entitys;
+package com.example.tectestbackenddev.entitys;
 
 import javax.persistence.*;
 
@@ -9,14 +9,13 @@ import lombok.*;
 @ToString
 
 @Entity
-@Table(name="Shipment")
+@Table(name = "Shipment")
 public class Shipment {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
 
 
 }
