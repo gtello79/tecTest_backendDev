@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -36,6 +34,7 @@ public class EmployerRest {
         */
         return Objects.equals(id,idSaved) && Objects.equals(pass, passSaved);
     }
+
     /*
     //Consultar el listado de productos vendidos
     @RequestMapping(value = "/{actualName}/ProductList", method = RequestMethod.GET)

@@ -11,18 +11,18 @@ import lombok.*;
 @Entity
 @Table(name="nationality")
 public class Nationality {
-    @Id
-    @Column(name = "isoCode")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int isoCode;
 
-    @Column(name="nationalityName")
+    @Id
+    @Column(name = "isocode")
+    private int isocode;
+
+    @Column(name="nationalityname")
     String nationalityName;
 
-    @Column(name="idContinent")
+    @Column(name="idcontinent")
     int idContinent;
 
-    @Column(name="userID")
+    @Column(name="userid")
     int userID;
 
 }

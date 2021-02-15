@@ -2,7 +2,7 @@ package com.example.tectestbackenddev.rest;
 
 import com.example.tectestbackenddev.dao.NationalityDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +27,7 @@ class ProductRest {
         newNation.setNationalityName(nationalityName);
         newNation.setIdContinent(continentID);
         newNation.setUserID(userUID);
-        newNation.setIsoCode(isoCode);
+        newNation.setIsocode(isoCode);
 
         return ResponseEntity.ok(newNation);
     }
