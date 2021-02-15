@@ -25,8 +25,6 @@ class ProductRest {
         int userUID = 18986470;
 
         newNation.setNationalityName(nationalityName);
-        newNation.setIdContinent(continentID);
-        newNation.setUserID(userUID);
         newNation.setIsocode(isoCode);
 
         return ResponseEntity.ok(newNation);

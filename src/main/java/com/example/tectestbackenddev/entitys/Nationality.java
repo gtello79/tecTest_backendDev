@@ -19,10 +19,4 @@ public class Nationality {
     @Column(name="nationalityname")
     String nationalityName;
 
-    @Column(name="idcontinent")
-    int idContinent;
-
-    @Column(name="userid")
-    int userID;
-
 }
