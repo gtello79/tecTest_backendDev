@@ -13,10 +13,10 @@ import lombok.*;
 public class Nationality {
 
     @Id
-    @Column(name = "isocode")
-    private int isocode;
+    @Column(name = "iso_code")
+    private int isoCode;
 
-    @Column(name="nationalityname")
-    String nationalityName;
+    @Column(name="country_name")
+    String countryName;
 
 }

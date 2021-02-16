@@ -14,29 +14,20 @@ import java.util.ArrayList;
 @Table(name = "Employer")
 public class Employer {
     @Id
-    @Column(name = "ID")
+    @Column(name = "employer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idEmployer;
+    private int employerId;
 
-    @Column(name = "Name")
-    private String name;
+    @Column(name = "employerName")
+    private String employerName;
 
-    @Column(name = "Password")
-    private String password;
+    @Column(name = "employerPass")
+    private String employerPass;
 
-    public int calculateProduct(ArrayList<Transaction> mytransactions){
-        int count = 0;
-        double mount = 0;
+    @Column(name= "employer_phone")
+    private int employerPhone;
 
-        //Aqui debo consultar la accion a realizar
-        int typeProcess = 0;
-        for(Transaction p: mytransactions){
-            if(typeProcess == p.getIdTransaction()){
-                count++;
-            }
-        }
-
-        return count;
-    }
+    @Column(name= "email")
+    private String email;
 
 }
