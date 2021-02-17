@@ -11,8 +11,10 @@ import lombok.*;
 @Entity
 @Table(name = "Transaction")
 public class Transaction {
-
     @Id
+    @Column(name ="IdTransaction")
+    private int idTransaction;
+
     @Column(name = "IDEmployer")
     private int idEmployer;
 
@@ -20,10 +22,13 @@ public class Transaction {
     private int idProduct;
 
     @Column(name = "IDTransactionType")
-    private int idTransaction;
+    private int idTransactionType;
 
     @Column(name = "TransactionDate")
-    private String date;
+    private String transactionDate;
+
+    @Column(name="TransactionTime")
+    private String transactionTime;
 
 
 }

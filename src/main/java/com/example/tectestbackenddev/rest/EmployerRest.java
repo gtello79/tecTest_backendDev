@@ -6,6 +6,7 @@ import com.example.tectestbackenddev.dao.TransactionDAO;
 import com.example.tectestbackenddev.entitys.Employer;
 import com.example.tectestbackenddev.entitys.Product;
 
+import com.example.tectestbackenddev.entitys.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/employers")
@@ -41,19 +43,24 @@ public class EmployerRest {
             idSaved = employer.getEmployerId();
             passSaved = employer.getEmployerPass();
         }
-
-        return Objects.equals(employer.getEmployerId(),idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
+        return Objects.equals(employer.getEmployerId(), idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
 
     }
 
     //Add a new product
     @RequestMapping(value = "/{employerName}/addProduct", method = RequestMethod.POST)
-    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct ){
+    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct, int idTransaction ){
 
         Optional<Product> pivProduct = productDAO.findById(newProduct.getIdProduct());
-        //Verification is the product is on the DataBase
+        //Verification if the product is on DataBase
         if(!pivProduct.isPresent()){
             productDAO.save(newProduct);
+            Transaction newTransaction = new Transaction();
+            newTransaction.setIdEmployer(employer.getEmployerId());
+            newTransaction.setIdProduct(newProduct.getIdProduct());
+            newTransaction.setIdTransaction(idTransaction);
+
+            transactionDAO.save(newTransaction);
         }
         return ResponseEntity.ok(newProduct);
 
@@ -76,15 +83,15 @@ public class EmployerRest {
     public ResponseEntity<List<Product>> getProductList(){
         List<Product> productList = productDAO.findAll();
 
-        //Filtrar productos a partir desde
-
         return ResponseEntity.ok(productList);
     }
+
 
     //edit a product
     @RequestMapping(value="/editProduct",method = RequestMethod.PUT)
     public ResponseEntity<Product> editProduct(@RequestBody Product product){
         Optional<Product> pivProduct = productDAO.findById(product.getIdProduct());
+
         if(pivProduct.isPresent()){
             Product updateProduct = pivProduct.get();
 
@@ -94,10 +101,12 @@ public class EmployerRest {
 
             productDAO.save(updateProduct);
             return ResponseEntity.ok(updateProduct);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
 
+        }else{
+
+            return ResponseEntity.notFound().build();
+
+        }
     }
 
 }
