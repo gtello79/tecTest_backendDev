@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -32,37 +35,51 @@ public class EmployerRest {
     private TransactionDAO transactionDAO;
 
 
-    //Aplicar Login
+    //User Login
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public boolean UserLogin(String passSaved, int idSaved){
 
         Optional<Employer> actualUser = employerDAO.findById(idSaved);
 
-        if(actualUser.isPresent()){
+        if(actualUser.isPresent()) {
             employer = actualUser.get();
             idSaved = employer.getEmployerId();
             passSaved = employer.getEmployerPass();
-        }
-        return Objects.equals(employer.getEmployerId(), idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
+            return Objects.equals(employer.getEmployerId(), idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
+
+        }else
+            return false;
+
 
     }
 
     //Add a new product
     @RequestMapping(value = "/{employerName}/addProduct", method = RequestMethod.POST)
-    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct, int idTransaction ){
-
+    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct){
         Optional<Product> pivProduct = productDAO.findById(newProduct.getIdProduct());
+        Date instant = new Date(17022021);
+        Time currentTime = new Time(1247);
+
+
         //Verification if the product is on DataBase
         if(!pivProduct.isPresent()){
-            productDAO.save(newProduct);
+
             Transaction newTransaction = new Transaction();
-            newTransaction.setIdEmployer(employer.getEmployerId());
-            newTransaction.setIdProduct(newProduct.getIdProduct());
-            newTransaction.setIdTransaction(idTransaction);
+            productDAO.save(newProduct);
+
+            newTransaction.setEmployerId(employer.getEmployerId());
+            newTransaction.setProductId(newProduct.getIdProduct());
+            newTransaction.setTransactionDate(instant);
+            newTransaction.setTransactionTime(currentTime);
 
             transactionDAO.save(newTransaction);
+            System.out.println("MENSAJE DE ACEPTADO");
+            return ResponseEntity.accepted().build();
+
         }
+        System.out.println("MENSAJE DE NO ACEPTADO");
         return ResponseEntity.ok(newProduct);
+
 
     }
 
@@ -74,16 +91,24 @@ public class EmployerRest {
         if(todelete.isPresent()){
             productDAO.deleteById(idProduct);
         }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.notFound().build();
     }
 
 
     //Get a Products list with all the sold
     @RequestMapping(value = "/productSoldList", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> getProductList(){
-        List<Product> productList = productDAO.findAll();
+    public ResponseEntity<ArrayList<Product>> getProductSold(){
+        int idType = 2;
+        List<Transaction> transactionList = transactionDAO.findAll();
+        ArrayList<Product> soldProducts = new ArrayList<>();
 
-        return ResponseEntity.ok(productList);
+        for(Transaction t: transactionList){
+            if(t.getTransactionTypeId() == idType){
+                Product soldProduct = productDAO.findById(t.getProductId()).get();
+                soldProducts.add(soldProduct);
+            }
+        }
+        return ResponseEntity.ok(soldProducts);
     }
 
 
@@ -108,5 +133,24 @@ public class EmployerRest {
 
         }
     }
+
+    //Edit a transaction
+    @RequestMapping(value = "/editTransaction", method = RequestMethod.POST)
+    public ResponseEntity<Transaction> editTransaction(@RequestBody Transaction newTransaction){
+        Optional<Transaction> pivTransaction = transactionDAO.findById(newTransaction.getTransactionId());
+        if(pivTransaction.isPresent()){
+            Transaction editedTransaction = pivTransaction.get();
+            editedTransaction.setTransactionTime(newTransaction.getTransactionTime());
+            editedTransaction.setTransactionDate(newTransaction.getTransactionDate());
+            editedTransaction.setTransactionTypeId(newTransaction.getTransactionTypeId());
+
+            transactionDAO.save(editedTransaction);
+            return ResponseEntity.ok(editedTransaction);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
 
 }

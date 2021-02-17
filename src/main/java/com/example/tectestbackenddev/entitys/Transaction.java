@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.sql.Time;
+import java.util.Date;
+
 @Setter
 @Getter
 @ToString
@@ -12,23 +15,22 @@ import lombok.*;
 @Table(name = "Transaction")
 public class Transaction {
     @Id
-    @Column(name ="IdTransaction")
-    private int idTransaction;
+    @Column(name ="transaction_id")
+    private int transactionId;
 
-    @Column(name = "IDEmployer")
-    private int idEmployer;
+    @Column(name = "employer_id")
+    private int employerId;
 
-    @Column(name = "IDProduct")
-    private int idProduct;
+    @Column(name = "product_id")
+    private int ProductId;
 
-    @Column(name = "IDTransactionType")
-    private int idTransactionType;
+    @Column(name = "transaction_type_id")
+    private int transactionTypeId;
 
-    @Column(name = "TransactionDate")
-    private String transactionDate;
+    @Column(name = "transaction_date")
+    private Date transactionDate;
 
-    @Column(name="TransactionTime")
-    private String transactionTime;
-
+    @Column(name="transaction_time")
+    private Time transactionTime;
 
 }
