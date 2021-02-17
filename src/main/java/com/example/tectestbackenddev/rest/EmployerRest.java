@@ -2,6 +2,7 @@ package com.example.tectestbackenddev.rest;
 
 import com.example.tectestbackenddev.dao.EmployerDAO;
 import com.example.tectestbackenddev.dao.ProductDAO;
+import com.example.tectestbackenddev.dao.TransactionDAO;
 import com.example.tectestbackenddev.entitys.Employer;
 import com.example.tectestbackenddev.entitys.Product;
 
@@ -14,10 +15,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/employers")
 public class EmployerRest {
 
-    private Employer employer;
+    private Employer employer = null;
 
     @Autowired
     private EmployerDAO employerDAO;
@@ -25,14 +26,13 @@ public class EmployerRest {
     @Autowired
     private ProductDAO productDAO;
 
+    @Autowired
+    private TransactionDAO transactionDAO;
+
 
     //Aplicar Login
-    @RequestMapping(value="/loginUser", method = RequestMethod.GET)
-    public ResponseEntity<Employer> UserLogin(){
-
-        //obtener consulta desde BD sobre la informacion del usuario
-        int idSaved = 18986470;
-        String passSaved = "";
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+    public boolean UserLogin(String passSaved, int idSaved){
 
         Optional<Employer> actualUser = employerDAO.findById(idSaved);
 
@@ -42,7 +42,8 @@ public class EmployerRest {
             passSaved = employer.getEmployerPass();
         }
 
-        return ResponseEntity.ok(employer);
+        return Objects.equals(employer.getEmployerId(),idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
+
     }
 
     //Add a new product
@@ -70,7 +71,7 @@ public class EmployerRest {
     }
 
 
-    //Consultar el listado de productos vendidos
+    //Get a Products list with all the sold
     @RequestMapping(value = "/productSoldList", method = RequestMethod.GET)
     public ResponseEntity<List<Product>> getProductList(){
         List<Product> productList = productDAO.findAll();
@@ -80,7 +81,7 @@ public class EmployerRest {
         return ResponseEntity.ok(productList);
     }
 
-    //Editar Productos
+    //edit a product
     @RequestMapping(value="/editProduct",method = RequestMethod.PUT)
     public ResponseEntity<Product> editProduct(@RequestBody Product product){
         Optional<Product> pivProduct = productDAO.findById(product.getIdProduct());
@@ -98,7 +99,5 @@ public class EmployerRest {
         }
 
     }
-
-    //Consultar saldo historico de las ventas
 
 }
