@@ -1,15 +1,13 @@
 package com.example.tectestbackenddev.rest;
 
 import com.example.tectestbackenddev.dao.EmployerDAO;
+import com.example.tectestbackenddev.dao.ProductDAO;
 import com.example.tectestbackenddev.entitys.Employer;
 import com.example.tectestbackenddev.entitys.Product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +21,10 @@ public class EmployerRest {
 
     @Autowired
     private EmployerDAO employerDAO;
+
+    @Autowired
+    private ProductDAO productDAO;
+
 
     //Aplicar Login
     @RequestMapping(value="/loginUser", method = RequestMethod.GET)
@@ -43,20 +45,59 @@ public class EmployerRest {
         return ResponseEntity.ok(employer);
     }
 
+    //Add a new product
+    @RequestMapping(value = "/{employerName}/addProduct", method = RequestMethod.POST)
+    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct ){
 
-    //Consultar el listado de productos vendidos
-    @RequestMapping(value = "/{actualName}/ProductList", method = RequestMethod.GET)
-    public ResponseEntity<List<Product>> getProductList(){
-        //Consultar los listados de productos vendidos por el empleado
-        List<Product> employersProducts = null;
-        return ResponseEntity.ok(employersProducts);
+        Optional<Product> pivProduct = productDAO.findById(newProduct.getIdProduct());
+        //Verification is the product is on the DataBase
+        if(!pivProduct.isPresent()){
+            productDAO.save(newProduct);
+        }
+        return ResponseEntity.ok(newProduct);
+
     }
 
-    //Ingresar productos
+    //Delete a product
+    @RequestMapping(value = "/{employerName}", method = RequestMethod.DELETE)
+    public ResponseEntity<Product> deleteProduct(@PathVariable("employerName") String employerName, int idProduct){
+        Optional<Product> todelete = productDAO.findById(idProduct);
+
+        if(todelete.isPresent()){
+            productDAO.deleteById(idProduct);
+        }
+        return ResponseEntity.ok(null);
+    }
+
+
+    //Consultar el listado de productos vendidos
+    @RequestMapping(value = "/productSoldList", method = RequestMethod.GET)
+    public ResponseEntity<List<Product>> getProductList(){
+        List<Product> productList = productDAO.findAll();
+
+        //Filtrar productos a partir desde
+
+        return ResponseEntity.ok(productList);
+    }
 
     //Editar Productos
+    @RequestMapping(value="/editProduct",method = RequestMethod.PUT)
+    public ResponseEntity<Product> editProduct(@RequestBody Product product){
+        Optional<Product> pivProduct = productDAO.findById(product.getIdProduct());
+        if(pivProduct.isPresent()){
+            Product updateProduct = pivProduct.get();
 
-    //Eliminar Productos
+            updateProduct.setProductPrice(product.getProductPrice());
+            updateProduct.setProductName(product.getProductName());
+            updateProduct.setIsoCode(product.getIsoCode());
+
+            productDAO.save(updateProduct);
+            return ResponseEntity.ok(updateProduct);
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+
+    }
 
     //Consultar saldo historico de las ventas
 
