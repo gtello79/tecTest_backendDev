@@ -1,10 +1,8 @@
-package com.example.tectestbackenddev.entitys;
+package com.example.tectestbackenddev.entities;
 
 import javax.persistence.*;
 
 import lombok.*;
-
-import java.util.ArrayList;
 
 @Setter
 @Getter
@@ -14,7 +12,7 @@ import java.util.ArrayList;
 @Table(name = "Employer")
 public class Employer {
     @Id
-    @Column(name = "employer_id")
+    @Column(name = "employerId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employerId;
 
@@ -24,10 +22,5 @@ public class Employer {
     @Column(name = "employerPass")
     private String employerPass;
 
-    @Column(name= "employer_phone")
-    private int employerPhone;
-
-    @Column(name= "email")
-    private String email;
 
 }

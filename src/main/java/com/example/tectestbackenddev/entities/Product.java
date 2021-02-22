@@ -1,4 +1,4 @@
-package com.example.tectestbackenddev.entitys;
+package com.example.tectestbackenddev.entities;
 
 import javax.persistence.*;
 
@@ -13,16 +13,16 @@ import lombok.*;
 public class Product {
 
     @Id
-    @Column(name = "id_product")
+    @Column(name = "idProduct")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProduct;
 
-    @Column(name="product_name")
+    @Column(name="productName")
     private String productName;
 
-    @Column(name="product_price")
+    @Column(name="productPrice")
     private double productPrice;
 
-    @Column(name="iso_code")
+    @Column(name="isoCode")
     private int isoCode;
 }

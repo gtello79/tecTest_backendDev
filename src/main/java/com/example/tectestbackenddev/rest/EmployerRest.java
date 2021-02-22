@@ -1,12 +1,12 @@
 package com.example.tectestbackenddev.rest;
 
-import com.example.tectestbackenddev.dao.EmployerDAO;
 import com.example.tectestbackenddev.dao.ProductDAO;
 import com.example.tectestbackenddev.dao.TransactionDAO;
-import com.example.tectestbackenddev.entitys.Employer;
-import com.example.tectestbackenddev.entitys.Product;
 
-import com.example.tectestbackenddev.entitys.Transaction;
+import com.example.tectestbackenddev.entities.Employer;
+import com.example.tectestbackenddev.entities.Product;
+
+import com.example.tectestbackenddev.entities.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,43 +15,24 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
+import lombok.Getter;
+import lombok.Setter;
 
-@RestController
-@RequestMapping("/employers")
+@Setter
+@Getter
+
 public class EmployerRest {
 
-    private Employer employer = null;
-
-    @Autowired
-    private EmployerDAO employerDAO;
-
+    private Employer employer;
+/*
     @Autowired
     private ProductDAO productDAO;
 
     @Autowired
     private TransactionDAO transactionDAO;
 
-
-    //User Login
-    @RequestMapping(value="/login", method = RequestMethod.GET)
-    public boolean UserLogin(String passSaved, int idSaved){
-
-        Optional<Employer> actualUser = employerDAO.findById(idSaved);
-
-        if(actualUser.isPresent()) {
-            employer = actualUser.get();
-            idSaved = employer.getEmployerId();
-            passSaved = employer.getEmployerPass();
-            return Objects.equals(employer.getEmployerId(), idSaved) && Objects.equals(employer.getEmployerPass(), passSaved);
-
-        }else
-            return false;
-
-
-    }
 
     //Add a new product
     @RequestMapping(value = "/{employerName}/addProduct", method = RequestMethod.POST)
@@ -67,8 +48,8 @@ public class EmployerRest {
             Transaction newTransaction = new Transaction();
             productDAO.save(newProduct);
 
-            newTransaction.setEmployerId(employer.getEmployerId());
-            newTransaction.setProductId(newProduct.getIdProduct());
+            newTransaction.setEmployer(employer);
+            newTransaction.setProduct(newProduct);
             newTransaction.setTransactionDate(instant);
             newTransaction.setTransactionTime(currentTime);
 
@@ -103,9 +84,9 @@ public class EmployerRest {
         ArrayList<Product> soldProducts = new ArrayList<>();
 
         for(Transaction t: transactionList){
-            if(t.getTransactionTypeId() == idType){
-                Product soldProduct = productDAO.findById(t.getProductId()).get();
-                soldProducts.add(soldProduct);
+            if(t.getTransactionId() == idType){
+                Optional soldProduct = productDAO.findById(t.getProduct().getIdProduct());
+                soldProducts.add((Product) soldProduct.get());
             }
         }
         return ResponseEntity.ok(soldProducts);
@@ -128,7 +109,6 @@ public class EmployerRest {
             return ResponseEntity.ok(updateProduct);
 
         }else{
-
             return ResponseEntity.notFound().build();
 
         }
@@ -140,17 +120,20 @@ public class EmployerRest {
         Optional<Transaction> pivTransaction = transactionDAO.findById(newTransaction.getTransactionId());
         if(pivTransaction.isPresent()){
             Transaction editedTransaction = pivTransaction.get();
-            editedTransaction.setTransactionTime(newTransaction.getTransactionTime());
-            editedTransaction.setTransactionDate(newTransaction.getTransactionDate());
-            editedTransaction.setTransactionTypeId(newTransaction.getTransactionTypeId());
+            Time currentTime = (Time) newTransaction.getTransactionTime();
+            Date currentDate = (Date) newTransaction.getTransactionDate();
+            int currentTypeId = editedTransaction.getTransactionId();
+
+            editedTransaction.setTransactionTime(currentTime);
+            editedTransaction.setTransactionDate(currentDate);
+            editedTransaction.setTransactionId(currentTypeId);
 
             transactionDAO.save(editedTransaction);
             return ResponseEntity.ok(editedTransaction);
-        }else{
+        }else {
             return ResponseEntity.notFound().build();
         }
 
     }
-
-
+*/
 }

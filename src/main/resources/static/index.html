@@ -17,17 +17,19 @@
     </head>
 
     <body>
+
+
         <div class="modal-dialog text-center">
             <div class="col-sm-8 main-section">
                 <div class="modal-content">
 
-                    <form class="col-12" method="GET">
+                    <form class="main.jsp" method="GET" action = login>
                         <div class="form-group" id="user-group">
-                            <input type="text" class="form-control" placeholder="Nombre de usuario" name="username"/>
+                            <input type="text" class="form-control" placeholder="Nombre de usuario" name="username" value=""/>
                         </div>
 
                         <div class="form-group" id="contrasena-group">
-                            <input type="password" class="form-control" placeholder="Contrasena" name="password"/>
+                            <input type="password" class="form-control" placeholder="Contrasena" name="password" value=""/>
                         </div>
 
                         <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Ingresar </button>
@@ -36,5 +38,6 @@
                 </div>
             </div>
         </div>
+
     </body>
 </html>
