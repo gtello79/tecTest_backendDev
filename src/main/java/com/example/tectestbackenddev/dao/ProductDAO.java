@@ -1,7 +1,7 @@
 package com.example.tectestbackenddev.dao;
 
 import com.example.tectestbackenddev.entities.Product;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ProductDAO extends JpaRepository<Product, Integer> {
+public interface ProductDAO extends CrudRepository<Product, Integer> {
 }

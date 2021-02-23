@@ -14,6 +14,7 @@ import java.util.Date;
 @Entity
 @Table(name = "Transaction")
 public class Transaction {
+
     @Id
     @Column(name = "transactionId")
     private int transactionId;
@@ -24,6 +25,9 @@ public class Transaction {
     @Column(name="transactionTime")
     private Time transactionTime;
 
+    @Column(name="transactionType")
+    private int transactionType;
+
     @OneToOne
     @JoinColumn(name="employerId")
     private Employer employer;
@@ -31,6 +35,5 @@ public class Transaction {
     @OneToOne
     @JoinColumn(name="productId")
     private Product product;
-
 
 }

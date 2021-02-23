@@ -1,7 +1,11 @@
 package com.example.tectestbackenddev.dao;
 
 import com.example.tectestbackenddev.entities.Transaction;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface TransactionDAO extends JpaRepository<Transaction, Integer> {
+import java.util.ArrayList;
+
+public interface TransactionDAO extends CrudRepository<Transaction, Integer> {
+
+    ArrayList<Transaction> findByTransactionType(int transactionType);
 }

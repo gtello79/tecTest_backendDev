@@ -1,12 +1,16 @@
 package com.example.tectestbackenddev.rest;
 
+import com.example.tectestbackenddev.dao.EmployerDAO;
 import com.example.tectestbackenddev.dao.ProductDAO;
 import com.example.tectestbackenddev.dao.TransactionDAO;
 
+import com.example.tectestbackenddev.dto.ProductDTO;
+import com.example.tectestbackenddev.dto.TransactionDTO;
 import com.example.tectestbackenddev.entities.Employer;
 import com.example.tectestbackenddev.entities.Product;
 
 import com.example.tectestbackenddev.entities.Transaction;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +23,68 @@ import java.util.Optional;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import javax.transaction.Transactional;
 
 @Setter
 @Getter
-
+@ToString
 public class EmployerRest {
 
     private Employer employer;
-/*
+
     @Autowired
     private ProductDAO productDAO;
 
     @Autowired
     private TransactionDAO transactionDAO;
 
+    @Autowired
+    private EmployerDAO employerDAO;
+
+    @Transactional
+    public ProductDTO createProduct(ProductDTO productDto){
+        Product presentProd = productDto.getProduct();
+        Optional<Product> prod = productDAO.findById(presentProd.getIdProduct());
+
+        if(prod.isPresent()){
+            return productToProductDTO( prod.get() );
+        }else{
+            productDAO.save(presentProd);
+            return productDto;
+        }
+    }
+
+    @Transactional
+    public ProductDTO findProductById(int idProduct){
+        Optional<Product> optionalProduct = productDAO.findById(idProduct);
+        if(optionalProduct.isPresent()){
+            Product consultProduct = optionalProduct.get();
+            return new ProductDTO(consultProduct);
+        }else{
+            return null;
+        }
+
+    }
+
+    @Transactional
+    public void createTransaction(Transaction newTransaction){
+        Time currentTime = new Time(0);
+        Date currentDate = new Date(0);
+
+        newTransaction.setTransactionDate(currentDate);
+        newTransaction.setTransactionTime(currentTime);
+
+        transactionDAO.save(newTransaction);
+    }
 
     //Add a new product
-    @RequestMapping(value = "/{employerName}/addProduct", method = RequestMethod.POST)
-    public ResponseEntity<Product> addNewProduct(@PathVariable("employerName") String employerName, @RequestBody Product newProduct){
+    @Transactional
+    public ResponseEntity<Product> addNewProduct(@RequestBody Product newProduct){
         Optional<Product> pivProduct = productDAO.findById(newProduct.getIdProduct());
         Date instant = new Date(17022021);
         Time currentTime = new Time(1247);
-
 
         //Verification if the product is on DataBase
         if(!pivProduct.isPresent()){
@@ -54,86 +98,88 @@ public class EmployerRest {
             newTransaction.setTransactionTime(currentTime);
 
             transactionDAO.save(newTransaction);
-            System.out.println("MENSAJE DE ACEPTADO");
             return ResponseEntity.accepted().build();
 
         }
-        System.out.println("MENSAJE DE NO ACEPTADO");
         return ResponseEntity.ok(newProduct);
-
 
     }
 
     //Delete a product
-    @RequestMapping(value = "/{employerName}", method = RequestMethod.DELETE)
-    public ResponseEntity<Product> deleteProduct(@PathVariable("employerName") String employerName, int idProduct){
+    @Transactional
+    public boolean deleteProduct(int idProduct){
         Optional<Product> todelete = productDAO.findById(idProduct);
-
+        boolean deleted = false;
         if(todelete.isPresent()){
             productDAO.deleteById(idProduct);
+            deleted = true;
         }
-        return ResponseEntity.notFound().build();
+        return deleted;
     }
 
-
-    //Get a Products list with all the sold
-    @RequestMapping(value = "/productSoldList", method = RequestMethod.GET)
-    public ResponseEntity<ArrayList<Product>> getProductSold(){
-        int idType = 2;
-        List<Transaction> transactionList = transactionDAO.findAll();
-        ArrayList<Product> soldProducts = new ArrayList<>();
+    //Get a sold product
+    @Transactional
+    public ArrayList<ProductDTO> getProductSold(int idType){
+        ArrayList<Transaction> transactionList = transactionDAO.findByTransactionType(idType);
+        ArrayList<ProductDTO> soldProducts = new ArrayList<>();
 
         for(Transaction t: transactionList){
-            if(t.getTransactionId() == idType){
-                Optional soldProduct = productDAO.findById(t.getProduct().getIdProduct());
-                soldProducts.add((Product) soldProduct.get());
-            }
+            Optional soldProduct = productDAO.findById( t.getProduct().getIdProduct() );
+            ProductDTO toAdd = productToProductDTO( (Product) soldProduct.get() );
+            soldProducts.add( toAdd );
         }
-        return ResponseEntity.ok(soldProducts);
+
+        return soldProducts;
     }
 
+    @Transactional
+    public ProductDTO editProduct(ProductDTO productDTO){
 
-    //edit a product
-    @RequestMapping(value="/editProduct",method = RequestMethod.PUT)
-    public ResponseEntity<Product> editProduct(@RequestBody Product product){
-        Optional<Product> pivProduct = productDAO.findById(product.getIdProduct());
+        Optional<Product> pivProduct = productDAO.findById(productDTO.getProductId());
 
         if(pivProduct.isPresent()){
             Product updateProduct = pivProduct.get();
 
-            updateProduct.setProductPrice(product.getProductPrice());
-            updateProduct.setProductName(product.getProductName());
-            updateProduct.setIsoCode(product.getIsoCode());
+            updateProduct.setProductPrice(productDTO.getProductPrice());
+            updateProduct.setProductName(productDTO.getProductName());
+            updateProduct.setIsoCode(productDTO.getIsoCode());
 
             productDAO.save(updateProduct);
-            return ResponseEntity.ok(updateProduct);
+            return productToProductDTO(updateProduct);
 
         }else{
-            return ResponseEntity.notFound().build();
+
+            return productToProductDTO(pivProduct.get());
 
         }
     }
 
-    //Edit a transaction
-    @RequestMapping(value = "/editTransaction", method = RequestMethod.POST)
-    public ResponseEntity<Transaction> editTransaction(@RequestBody Transaction newTransaction){
+    @Transactional
+    public boolean editTransaction(@RequestBody TransactionDTO newTransaction){
         Optional<Transaction> pivTransaction = transactionDAO.findById(newTransaction.getTransactionId());
+        boolean editedOption = false;
+
         if(pivTransaction.isPresent()){
+            editedOption = true;
             Transaction editedTransaction = pivTransaction.get();
-            Time currentTime = (Time) newTransaction.getTransactionTime();
-            Date currentDate = (Date) newTransaction.getTransactionDate();
+
             int currentTypeId = editedTransaction.getTransactionId();
+            Time currentTime = new Time(0);
+            Date currentDate = new Date(0);
 
             editedTransaction.setTransactionTime(currentTime);
             editedTransaction.setTransactionDate(currentDate);
             editedTransaction.setTransactionId(currentTypeId);
 
             transactionDAO.save(editedTransaction);
-            return ResponseEntity.ok(editedTransaction);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
 
+        }
+        return editedOption;
     }
-*/
+
+    public ProductDTO productToProductDTO(Product product){
+        return new ProductDTO(product);
+    }
+
+
 }

@@ -25,4 +25,5 @@ public class Product {
 
     @Column(name="isoCode")
     private int isoCode;
+
 }
