@@ -1,4 +1,4 @@
-package com.example.tectestbackenddev.dto;
+package com.example.tectestbackenddev.resources.dto;
 
 import lombok.Getter;
 import lombok.Setter;

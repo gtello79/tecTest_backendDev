@@ -1,4 +1,4 @@
-package com.example.tectestbackenddev.dto;
+package com.example.tectestbackenddev.resources.dto;
 
 import com.example.tectestbackenddev.entities.Employer;
 import com.example.tectestbackenddev.entities.Transaction;

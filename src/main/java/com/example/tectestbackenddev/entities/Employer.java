@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 
 @Entity
-@Table(name = "Employer")
+@Table(name = "employer")
 public class Employer {
     @Id
     @Column(name = "employerId")

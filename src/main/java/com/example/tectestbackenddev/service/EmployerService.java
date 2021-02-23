@@ -1,18 +1,22 @@
-package com.example.tectestbackenddev.rest;
+package com.example.tectestbackenddev.service;
 
 import com.example.tectestbackenddev.dao.EmployerDAO;
 import com.example.tectestbackenddev.dao.ProductDAO;
 import com.example.tectestbackenddev.dao.TransactionDAO;
 
-import com.example.tectestbackenddev.dto.ProductDTO;
-import com.example.tectestbackenddev.dto.TransactionDTO;
+import com.example.tectestbackenddev.entities.Customer;
+import com.example.tectestbackenddev.resources.dto.ProductDTO;
+import com.example.tectestbackenddev.resources.dto.TransactionDTO;
 import com.example.tectestbackenddev.entities.Employer;
 import com.example.tectestbackenddev.entities.Product;
 
 import com.example.tectestbackenddev.entities.Transaction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -27,10 +31,24 @@ import lombok.ToString;
 
 import javax.transaction.Transactional;
 
+import java.time.LocalDate;
+
+
 @Setter
 @Getter
 @ToString
-public class EmployerRest {
+@Service
+public class EmployerService {
+
+    private static List<Customer> customers = new ArrayList<>();
+    static {
+        customers.add(new Customer(101, "Steve", "steve@apple.com", LocalDate.of(1955, 2, 24)));
+        customers.add(new Customer(201, "Bill", "bill@microsoft.com", LocalDate.of(1955, 10, 28)));
+        customers.add(new Customer(301, "Larry", "larry@gmail.com", LocalDate.of(1973, 8, 21)));
+        customers.add(new Customer(401, "Sergey", "sergey@abc.xyz", LocalDate.of(1973, 3, 26)));
+    }
+
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private Employer employer;
 
@@ -119,9 +137,9 @@ public class EmployerRest {
 
     //Get a sold product
     @Transactional
-    public ArrayList<ProductDTO> getProductSold(int idType){
+    public List<ProductDTO> getProductSold(int idType){
         ArrayList<Transaction> transactionList = transactionDAO.findByTransactionType(idType);
-        ArrayList<ProductDTO> soldProducts = new ArrayList<>();
+        List<ProductDTO> soldProducts = new ArrayList<>();
 
         for(Transaction t: transactionList){
             Optional soldProduct = productDAO.findById( t.getProduct().getIdProduct() );
@@ -175,6 +193,10 @@ public class EmployerRest {
 
         }
         return editedOption;
+    }
+
+    public static List<Customer> findAll() {
+        return customers;
     }
 
     public ProductDTO productToProductDTO(Product product){

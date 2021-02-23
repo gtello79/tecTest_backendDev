@@ -8,22 +8,24 @@ import lombok.*;
 @Getter
 @ToString
 
+
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product
+{
 
     @Id
-    @Column(name = "idProduct")
+    @Column(name = "idproduct")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProduct;
 
-    @Column(name="productName")
+    @Column(name="productname")
     private String productName;
 
-    @Column(name="productPrice")
+    @Column(name="productprice")
     private double productPrice;
 
-    @Column(name="isoCode")
+    @Column(name="isocode")
     private int isoCode;
 
 }

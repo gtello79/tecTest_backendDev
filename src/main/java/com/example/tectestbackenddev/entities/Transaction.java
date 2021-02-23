@@ -13,27 +13,32 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Transaction")
+
 public class Transaction {
 
     @Id
-    @Column(name = "transactionId")
+    @Column(name = "transactionid")
     private int transactionId;
 
-    @Column(name = "transactionDate")
+    @Column(name = "transactiondate")
     private Date transactionDate;
 
-    @Column(name="transactionTime")
+    @Column(name="transactiontime")
     private Time transactionTime;
 
-    @Column(name="transactionType")
+    @Column(name="transactiontype")
     private int transactionType;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="employerId")
+    //@Column(name = "employerid")
+    @ToString.Exclude
     private Employer employer;
 
-    @OneToOne
-    @JoinColumn(name="productId")
+    @ManyToOne
+    @JoinColumn(name="productid" )
+    //@Column(name = "productid")
+    @ToString.Exclude
     private Product product;
 
 }

@@ -2,27 +2,28 @@ package com.example.tectestbackenddev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication()
-public class TectestbackenddevApplication {
+@EnableJpaRepositories(
+        basePackages = {
+                "com.example.tectestbackenddev.dao",
+        })
 
+@EntityScan(
+        basePackages = {
+            "com.example.tectestbackenddev.entities",
+        })
+
+@ComponentScan("com.example.tectestbackenddev")
+
+public class TectestbackenddevApplication
+{
     public static void main(String[] args) {
 
         SpringApplication.run(TectestbackenddevApplication.class, args);
-    }
-
-    @Bean
-    public WebMvcConfigurer forwardToIndex() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry){
-                registry.addViewController("/").setViewName(
-                        "forward:/index.html");
-            }
-        };
     }
 
 }
