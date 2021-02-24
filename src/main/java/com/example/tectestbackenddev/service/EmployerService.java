@@ -79,7 +79,10 @@ public class EmployerService {
         Optional<Product> optionalProduct = productDAO.findById(idProduct);
         if(optionalProduct.isPresent()){
             Product consultProduct = optionalProduct.get();
-            return new ProductDTO(consultProduct);
+            ProductDTO piv = new ProductDTO();
+            piv = piv.productToDTO(consultProduct);
+
+            return piv;
         }else{
             return null;
         }
@@ -141,6 +144,8 @@ public class EmployerService {
         ArrayList<Transaction> transactionList = transactionDAO.findByTransactionType(idType);
         List<ProductDTO> soldProducts = new ArrayList<>();
 
+
+        System.out.println(transactionList);
         for(Transaction t: transactionList){
             Optional soldProduct = productDAO.findById( t.getProduct().getIdProduct() );
             ProductDTO toAdd = productToProductDTO( (Product) soldProduct.get() );
@@ -200,7 +205,9 @@ public class EmployerService {
     }
 
     public ProductDTO productToProductDTO(Product product){
-        return new ProductDTO(product);
+        ProductDTO piv = new ProductDTO();
+        piv = piv.productToDTO(product);
+        return piv;
     }
 
 

@@ -18,10 +18,11 @@ public class ProductDTO {
 
     private double productPrice;
 
-    public ProductDTO(Product product){
+    public ProductDTO productToDTO(Product product){
         this.productName = product.getProductName();
         this.isoCode = product.getIsoCode();
         this.productId = product.getIdProduct();
+        return this;
     }
 
     public Product getProduct(){

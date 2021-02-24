@@ -23,7 +23,7 @@ public class EmployerResources {
     // Add Product
     @RequestMapping(value = "{employerName}/addProduct", method = RequestMethod.PUT)
     public ProductDTO addProduct(@PathVariable("employerName") String employerName
-                                , @RequestBody ProductDTO newProduct)
+                                ,@RequestBody ProductDTO newProduct)
     {
         return employerRest.createProduct(newProduct);
     }
@@ -54,7 +54,6 @@ public class EmployerResources {
     {
         return employerRest.editProduct(productdto);
     }
-
 
 
     // Edit a transaction
