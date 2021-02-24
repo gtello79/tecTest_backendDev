@@ -5,6 +5,14 @@
         <title>Add a New Product</title>
 
         <link href="/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .container {
+                margin-top: 80px;
+            }
+            .bg-dark {
+                background-color: #3b8dbd !important;
+            }
+        </style>
     </head>
 
     <body>

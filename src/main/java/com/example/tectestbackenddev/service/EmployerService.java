@@ -4,7 +4,6 @@ import com.example.tectestbackenddev.dao.EmployerDAO;
 import com.example.tectestbackenddev.dao.ProductDAO;
 import com.example.tectestbackenddev.dao.TransactionDAO;
 
-import com.example.tectestbackenddev.entities.Customer;
 import com.example.tectestbackenddev.resources.dto.ProductDTO;
 import com.example.tectestbackenddev.resources.dto.TransactionDTO;
 import com.example.tectestbackenddev.entities.Employer;
@@ -15,7 +14,6 @@ import com.example.tectestbackenddev.entities.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,22 +29,12 @@ import lombok.ToString;
 
 import javax.transaction.Transactional;
 
-import java.time.LocalDate;
-
 
 @Setter
 @Getter
 @ToString
 @Service
 public class EmployerService {
-
-    private static List<Customer> customers = new ArrayList<>();
-    static {
-        customers.add(new Customer(101, "Steve", "steve@apple.com", LocalDate.of(1955, 2, 24)));
-        customers.add(new Customer(201, "Bill", "bill@microsoft.com", LocalDate.of(1955, 10, 28)));
-        customers.add(new Customer(301, "Larry", "larry@gmail.com", LocalDate.of(1973, 8, 21)));
-        customers.add(new Customer(401, "Sergey", "sergey@abc.xyz", LocalDate.of(1973, 3, 26)));
-    }
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -100,31 +88,6 @@ public class EmployerService {
         transactionDAO.save(newTransaction);
     }
 
-    //Add a new product
-    @Transactional
-    public ResponseEntity<Product> addNewProduct(@RequestBody Product newProduct){
-        Optional<Product> pivProduct = productDAO.findById(newProduct.getIdProduct());
-        Date instant = new Date(17022021);
-        Time currentTime = new Time(1247);
-
-        //Verification if the product is on DataBase
-        if(!pivProduct.isPresent()){
-
-            Transaction newTransaction = new Transaction();
-            productDAO.save(newProduct);
-
-            newTransaction.setEmployer(employer);
-            newTransaction.setProduct(newProduct);
-            newTransaction.setTransactionDate(instant);
-            newTransaction.setTransactionTime(currentTime);
-
-            transactionDAO.save(newTransaction);
-            return ResponseEntity.accepted().build();
-
-        }
-        return ResponseEntity.ok(newProduct);
-
-    }
 
     //Delete a product
     @Transactional
@@ -198,10 +161,6 @@ public class EmployerService {
 
         }
         return editedOption;
-    }
-
-    public static List<Customer> findAll() {
-        return customers;
     }
 
     public ProductDTO productToProductDTO(Product product){

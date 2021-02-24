@@ -35,6 +35,7 @@ public class EmployerResources {
     public boolean deleteProduct (@PathVariable("employerName") String employerName,
                                   int idProduct)
     {
+
         return employerRest.deleteProduct(idProduct);
     }
 
